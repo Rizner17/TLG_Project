@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+""" AJRodriguez | Stock market analysis"""
+
+import json
+import requests
+import datetime
+import matplotlib.pyplot as plt
+
+#Stock Ticker is the symbol i.e. AAPL, date is in format: YYYY-MM-DD
+
+API_key = ("/home/student/MyProject/polygonAPI.key")
+
+def Poly():
+    ## first I want to grab my credentials
+    with open("/home/student/MyProject/polygonAPI.key", "r") as Stonks:
+        Poly = Stonks.readline()
+    return Poly.rstrip("\n")
+    Poly = returncreds()
+def main():
+    stockTicker = input("What stock would you like to request?")
+    Prices = []
+    Dates = []
+    for i in range(7):
+
+        today = datetime.date.today()
+        oneday = datetime.timedelta(days=i)
+        date = today - oneday
+        try:
+            if date.weekday() in [5, 6]:
+                continue
+
+            Polygonapi = f"https://api.polygon.io/v1/open-close/{stockTicker}/{date}?unadjusted=true&apiKey={Poly()}"
+            Polyresp = requests.get(Polygonapi)
+            Polydata = Polyresp.json()
+        
+            #print(Polydata["close"])
+            Prices.append(Polydata["close"])
+            Dates.append(date)
+
+        except:
+            pass
+
+        fig, ax = plt.subplots()
+        ax.plot(Dates, Prices, label= stockTicker)
+        ax.legend()
+        plt.xticks(rotation= 35)
+
+        #display the graph
+        plt.show()
+        plt.savefig(f"/home/student/mycode/graphing/WeeklyStonks{stockTicker}.pdf")
+        #save copy to "~/static" (the "files" view)
+        plt.savefig(f"/home/student/static/WeeklyStonks{stockTicker}.pdf")
+
+if __name__ == "__main__":
+    main()
