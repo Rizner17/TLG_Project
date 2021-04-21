@@ -39,6 +39,10 @@ def main():
         prices.append(polydata["close"])#appends the price list above for use in the graph
         dates.append(date)#appends the date list above for use in our graph
 
+    #if min(prices) == prices[0]: ###wanted to do a buy and sell trigger but api data is for previous days
+    #    print("buy the dip!")
+    #if max(prices) == prices[0]:
+    #    print("sell for profit!")
     figure, axis = plt.subplots()
     axis.plot(dates, prices, label= stockTicker)
     plt.ylabel("Closing Price")#labels the y-axis "Closing Prices"
